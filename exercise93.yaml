@@ -1,0 +1,13 @@
+---
+- hosts: ansible2
+  vars:
+    timesync_ntp_servers:
+      - hostname: pool.ntp.org
+        iburst: yes
+    timezone: UTC
+  roles:
+    - rhel-system-roles.timesync
+  tasks:
+    - name: set timezone
+      timezone:
+        name: "{{ timezone }}"

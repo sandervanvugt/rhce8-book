@@ -1,0 +1,15 @@
+- name: use subscription manager to register and set up repos
+  hosts: ansible5
+  tasks:
+  - name: register and subscribe ansible5
+    redhat_subscription:
+      username: bob@example.com
+      password: verysecretpassword
+      state: present
+  - name: configure additional repo access
+    rhsm_repository:
+      name:
+      - rh-gluster-3-client-for-rhel-8-x86_64-rpms
+      - rhel-8-for-x86_64-appstream-debug-rpms
+      state: present
+

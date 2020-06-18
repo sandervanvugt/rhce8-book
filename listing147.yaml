@@ -1,0 +1,12 @@
+---
+- name: reboot all hosts
+  hosts: all
+  gather_facts: no
+  tasks:
+  - name: reboot hosts
+    reboot:
+      msg: reboot initiated by Ansible
+      test_command: whoami
+  - name: print message to show host is back
+    debug:
+      msg: successfully rebooted

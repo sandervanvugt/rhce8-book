@@ -1,0 +1,65 @@
+---
+- name: allocate storage
+  hosts:
+    - ansible1.example.com
+    - ansible2.example.com
+    - ansible3.example.com
+  vars:
+    - disk_name: sdb
+    - partition_number: 1
+    - vg_name: vgdata
+    - lv_name: lvdata
+    - disk_gb_threshold: 1
+    - disk_bytes_threshold: "{{ disk_gb_threshold * 1024 * 1024 * 1024 }}"
+    - large_lv_size: 1500M
+    - small_lv_size: 800M
+    - disk_bytes: "{{ lsblk.stdout }}"
+  tasks:
+
+    - name: abort if second disk does not exist
+      assert:
+        that:
+          - "ansible_facts['devices']['{{ disk_name }}'] is defined"
+        fail_msg: "no second hard disk"
+
+    - name: get disk size
+      command:
+        cmd: /bin/lsblk -n -d -o SIZE -b /dev/{{ disk_name }}
+      changed_when: false
+      register: lsblk
+
+    - name: partition disk
+      parted:
+        device: "/dev/{{ disk_name }}"
+        state: present
+        number: "{{ partition_number }}"
+
+    - name: create volume group
+      lvg:
+        vg: "{{ vg_name }}"
+        pvs: "/dev/{{ disk_name }}{{ partition_number }}"
+
+    - name: create large logical volume
+      lvol:
+        vg: "{{ vg_name }}"
+        lv: "{{ lv_name }}"
+        size: "{{ large_lv_size }}"
+      when: disk_bytes > disk_bytes_threshold
+
+    - name: handle case of small disk
+      block:
+        - name: create small logical volume
+          lvol:
+            vg: "{{ vg_name }}"
+            lv: "{{ lv_name }}"
+            size: "{{ small_lv_size }}"
+        - name: notify user if a small disk was found
+          debug:
+            msg: "small disk found"
+      when: disk_bytes <= disk_bytes_threshold
+
+    - name: create filesystem
+      filesystem:
+        dev: "/dev/{{ vg_name }}/{{ lv_name }}"
+        fstype: xfs
+...

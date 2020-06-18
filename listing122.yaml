@@ -1,0 +1,9 @@
+---
+- name: updating all packages
+  hosts: ansible2
+  tasks:
+  - name: system update
+    yum:
+      name: '*'
+      state: latest
+    

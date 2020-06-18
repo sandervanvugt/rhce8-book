@@ -1,0 +1,3 @@
+packagename: vsftpd
+servicename: vsftpd
+firewalld_servicename: ftp

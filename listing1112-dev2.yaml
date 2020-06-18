@@ -1,0 +1,9 @@
+---
+- name: filter test
+  hosts: localhost
+  vars_prompt:
+  - name: number
+    prompt: enter a number
+  tasks:
+  - debug:
+      msg: result is {{ ( number | int) * 4 }} 

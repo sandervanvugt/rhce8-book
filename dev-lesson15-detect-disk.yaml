@@ -1,0 +1,7 @@
+---
+- name: detect disk and set as variable
+  hosts: all
+  include_vars: "{{ ansible_facts['devices']['sdb'] }}.yaml"
+  tasks: 
+  - debug: 
+      msg: diskname is set to {{ diskname }} 

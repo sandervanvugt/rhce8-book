@@ -1,0 +1,9 @@
+---
+- name: conditional variable definition
+  hosts: all
+  tasks: 
+  - name: print disk name
+    debug:
+      msg: the disk name is {{ ansible_facts['devices']['sdb'] }} 
+    when: ansible_facts['devices']['sdb'] 
+    ignore_errors: yes

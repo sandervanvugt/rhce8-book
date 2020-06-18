@@ -1,0 +1,7 @@
+---
+- name: remove user from wheel group
+  hosts: ansible4
+  tasks:
+  - user:
+      name: ansible
+      groups: ''

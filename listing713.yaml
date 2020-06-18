@@ -1,0 +1,13 @@
+---
+- name: using multiple conditions
+  hosts: all
+  tasks:
+  - package:
+      name: httpd
+      state: removed
+    when: > 
+      ( ansible_facts['distribution'] == "RedHat" and
+        ansible_facts['memfree_mb'] < 512 ) 
+      or
+      ( ansible_facts['distribution'] == "CentOS" and
+        ansible_facts['memfree_mb'] < 256 )

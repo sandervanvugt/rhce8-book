@@ -1,0 +1,22 @@
+---
+- name: enabling SELinux and a boolean
+  hosts: ansible1
+  vars:
+    myboolean: httpd_read_user_content
+  tasks:
+  - name: enabling SELinux
+    selinux:
+      policy: targeted
+      state: enforcing
+  - name: checking current {{ myboolean }} Boolean status
+    shell: getsebool -a | grep {{ myboolean }} 
+    register: bool_stat
+  - name: showing boolean status
+    debug:
+      msg: the current {{ myboolean }} status is {{ bool_stat.stdout }} 
+  - name: enabling boolean
+    seboolean:
+      name: "{{ myboolean }}"
+      state: yes
+      persistent: yes
+

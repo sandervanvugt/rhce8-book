@@ -1,0 +1,13 @@
+---
+- name: configure swap storage
+  hosts: ansible2
+  tasks:
+  - name: setup swap
+    block:
+    - name: make the swap filesystem
+      filesystem:
+        fstype: swap
+        dev: /dev/sdb1
+    - name: activate swap space
+      command: swapon /dev/sdb1
+    when: ansible_swaptotal_mb < 256

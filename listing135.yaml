@@ -1,0 +1,8 @@
+---
+- name: simple demo with the lookup plugin
+  hosts: localhost
+  vars: 
+    file_contents: "{{lookup('file', '/etc/hosts')}}"
+  tasks:
+  - debug:
+      var: file_contents

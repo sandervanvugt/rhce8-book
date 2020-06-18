@@ -1,0 +1,21 @@
+---
+- hosts: ansible2
+  vars:
+    selinux_policy: targeted
+    selinux_state: enforcing
+    selinux_fcontexts:
+      - { target: '/web(/.*)?', setype: 'httpd_sys_content_t', ftype: 'd' }
+    selinux_restore_dirs:
+      - /web
+
+  # prepare prerequisites which are used in this playbook
+  tasks:
+    - name: Creates directory
+      file:
+        path: /web
+        state: directory
+    - name: execute the role and catch errors
+      block:
+        - include_role:
+            name: rhel-system-roles.selinux
+    

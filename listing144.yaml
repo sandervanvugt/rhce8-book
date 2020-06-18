@@ -1,0 +1,11 @@
+---
+- name: run an at task
+  hosts: ansible2
+  tasks:
+    - name: run command and write output to file
+      at:
+        command: "date > /tmp/my-at-file"
+        count: 5
+        units: minutes
+        unique: yes
+        state: present

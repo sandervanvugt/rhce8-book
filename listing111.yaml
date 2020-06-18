@@ -1,0 +1,7 @@
+---
+- name: simple template example
+  hosts: ansible2
+  tasks:
+  - template:
+      src: listing112.j2
+      dest: /etc/issue

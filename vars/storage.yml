@@ -1,0 +1,21 @@
+---
+
+partitions:
+  - number: 1
+    start: 1MiB
+    end: 1GiB
+
+vgs:
+  - name: vgweb
+    devices: /dev/sdb1
+
+lvs:
+  - name: lvwebdocs
+    size: 512M
+    vgroup: vgweb
+    path: /var/www
+
+  - name: lvlogs
+    size: 256M
+    vgroup: vgweb
+    path: /var/log/httpd

@@ -1,0 +1,10 @@
+---
+- name: using systemd module to manage services
+  hosts: ansible2
+  tasks:
+  - name: enable service httpd and ensure it is not masked
+    systemd:
+      name: httpd
+      enabled: yes
+      masked: no
+      daemon_reload: yes

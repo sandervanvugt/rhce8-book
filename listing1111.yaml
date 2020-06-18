@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  vars_prompt:
+  - name: filesize
+    prompt: "specify a file size in megabytes"
+  tasks:
+  - name: check if file size is valid
+    assert:
+      that:
+      - "{{ (filesize | int) <= 100 }}"
+      - "{{ (filesize | int) >= 1 }}"
+      fail_msg: "file size must be between 0 and 100"
+      success_msg: "file size is good, let\'s continue"
+  - name: create a file
+    command: dd if=/dev/zero of=/bigfile bs=1 count={{ filesize }} 

@@ -1,0 +1,11 @@
+---
+- name: setting up repository access
+  hosts: all
+  tasks:
+  - name: connect to example repo
+    yum_repository:
+      name: example repo
+      description: RHCE8 example repo
+      file: examplerepo
+      baseurl: ftp://control.example.com/repo/
+      gpgcheck: no

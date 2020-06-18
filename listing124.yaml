@@ -1,0 +1,8 @@
+---
+- name: installing an AppStream module
+  hosts: ansible2
+  tasks:
+  - name: install or update an AppStream module
+    yum:
+      name: '@php:7.3/devel'
+      state: present

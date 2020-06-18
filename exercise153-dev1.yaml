@@ -1,0 +1,16 @@
+---
+- name: get vg sizes
+  hosts: all
+  tasks:
+  - name: find small vgroups sizes
+    debug:
+      msg: vgroup smaller than or equal to 20G
+    when: 
+    - ansible_facts['lvm']['vgs']['cl'] is defined
+    - ansible_facts['lvm']['vgs']['cl']['size_g'] <= 20.00
+  - name: find large vgroups sizes
+    debug:
+      msg: vgroup larger than or equal to 19G
+    when:
+    - ansible_facts['lvm']['vgs']['cl'] is defined
+    - ansible_facts['lvm']['vgs']['cl']['size_g'] >= 19.00

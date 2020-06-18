@@ -1,0 +1,9 @@
+users:
+- username: sharon
+  groups: admins
+- username: blair
+  groups: admins
+- username: ashley
+  groups: students
+- username: ahmed
+  groups: students

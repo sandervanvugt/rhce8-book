@@ -1,0 +1,10 @@
+---
+- name: debug demo
+  hosts: ansible3
+  tasks:
+  - name: copy key
+    authorized_key:
+      user: pieter
+      state: present
+      manage_dir: yes
+      key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"

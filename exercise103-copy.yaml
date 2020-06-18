@@ -1,0 +1,4 @@
+ - name: copy a file
+   copy:
+     content: "welcome to this server"
+     dest: /var/ftp/pub/README

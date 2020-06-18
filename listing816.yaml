@@ -1,0 +1,8 @@
+---
+- name: generete host list
+  hosts: ansible2
+  tasks:
+  - name: template loop
+    template:
+      src: listing815.j2
+      dest: /tmp/hostports.txt

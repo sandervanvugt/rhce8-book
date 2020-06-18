@@ -1,0 +1,30 @@
+---
+- name: prepare localhost
+  hosts: localhost
+  tasks:
+  - name: create the local user, including SSH key
+    user:
+      name: "{{ username }}"
+      generate_ssh_key: true
+      ssh_key_comment: "{{ username }}@{{ ansible_fqdn }}"
+  - name: create a directory to store the file
+    file:
+      name: "{{ username }}"
+      state: directory
+  - name: copy the local user ssh key to temporary {{ username }} key
+    shell: 'cat /home/{{ username }}/.ssh/id_rsa.pub > {{ username }}/id_rsa.pub'
+    become: true
+    delegate_to: localhost
+  - name: verify that file exists
+    command: ls -l {{ username }}/
+
+- name: setup remote host
+  hosts: ansible1
+  tasks:
+  - name: create remote user, no need for SSH key
+    user:
+      name: "{{ username }}"
+  - name: use authorized_key to set the password
+    authorized_key:
+      user: "{{ username }}"
+      key: "{{ lookup('file', './'+ username +'/id_rsa.pub') }}"

@@ -1,0 +1,7 @@
+galaxy_info:
+  author: Sander van V
+  description: your description
+  company: your company (optional)
+  license: license (GPLv2, CC-BY, etc)
+  min_ansible_version: 2.5
+

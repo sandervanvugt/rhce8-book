@@ -1,0 +1,17 @@
+---
+- name: use rpm_key in repository access
+  hosts: all
+  tasks:
+  - name: get the GPG public key
+    rpm_key:
+      key: ftp://control.example.com/repo/RPM-GPG-KEY
+      state: present
+  - name: set up the repository client
+    yum_repository:
+      file: myrepo
+      name: myrepo
+      description: example repo
+      baseurl: ftp://control.example.com/repo
+      enabled: yes
+      gpgcheck: yes
+      state: present

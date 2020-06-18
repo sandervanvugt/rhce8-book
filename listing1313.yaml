@@ -1,0 +1,15 @@
+- name: create user with encrypted password
+  hosts: ansible3
+  vars:
+    password: mypassword
+    user: anna
+  tasks:
+  - name: configure user {{ user }} 
+    user:
+      name: "{{ user }}"
+      groups: wheel
+      append: yes
+      state: present
+  - name: set a password for {{ user }} 
+    shell: 'echo {{ password }} | passwd --stdin {{ user }}'
+

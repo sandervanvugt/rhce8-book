@@ -1,0 +1,8 @@
+---
+- name: install or update a package group
+  hosts: ansible2
+  tasks:
+  - name: install or update a package group
+    yum:
+      name: '@Virtualization Host'
+      state: latest

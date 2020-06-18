@@ -1,0 +1,14 @@
+- name: simple block example
+  hosts: all
+  tasks:
+  - name: setting up http
+    block:
+    - name: installing http
+      yum:
+        name: httpd
+        state: present
+    - name: restart httpd
+      service:
+        name: httpd
+        state: started
+    when: ansible_distribution == "CentOS"

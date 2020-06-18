@@ -1,0 +1,9 @@
+---
+- name: show dictionary also known as hash
+  hosts: ansible1
+  vars_files:
+    - vars/users-dictionary
+  tasks:
+    - name: print dictionary values
+      debug:
+        msg: "User {{ users['linda']['username'] }} has homedirectory {{ users['linda']['homedir'] }} and shell {{ users['linda']['shell']  }}"

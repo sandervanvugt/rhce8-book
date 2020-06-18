@@ -1,0 +1,9 @@
+users:
+  - username: linda
+    groups: sales
+  - username: lori
+    groups: sales
+  - username: lisa
+    groups: account
+  - username: lucy
+    groups: account

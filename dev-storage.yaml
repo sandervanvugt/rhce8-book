@@ -1,0 +1,87 @@
+---
+- name: Setup storage on different servers
+  hosts: all
+  tasks:
+  - name: Print No Second Disk Message
+    debug:
+      msg: "No Second Disk found"
+    when:
+      - ansible_facts['devices']['sdb'] is not defined
+  - name: create LV on > 1G
+    block:
+      - name: Create 1500 partition
+        parted:
+          device: /dev/sdb
+          number: 1
+          part_end: 1.8GiB
+          state: present
+
+      - name: Create Vol Group
+        lvg:
+          pvs: /dev/sdb1
+          vg: vgdata
+          state: present
+      - name: Create LV
+        lvol:
+          vg: vgdata
+          lv: lvdata
+          size: 1.5g
+          state: present
+      - name: create File System
+        filesystem:
+          dev: /dev/vgdata/lvdata
+          fstype: xfs
+      - name: Create Mount Point
+        file:
+          path: /share1
+          state: directory
+      - name: mount file system
+        mount:
+          src: /dev/vgdata/lvdata
+          path: /share
+          fstype: xfs
+          state: mounted
+    when:  
+      - ansible_facts['devices']['sdb']  is defined
+      - ansible_facts['devices']['sdb']['size']  > "1000000"
+        
+  - name: create LV on > 1G
+    block:
+      - name: Display message
+        debug:
+          msg: Small disk found
+      - name: Create 800M LV
+        parted:
+          device: /dev/sdb
+          number: 1
+          part_end: 900MiB
+          state: present
+
+      - name: Create Vol Group
+        lvg:
+          pvs: /dev/sdb1
+          vg: vgdata
+          state: present
+      - name: Create LV
+        lvol:
+          vg: vgdata
+          lv: lvdata
+          size: 800m
+          state: present
+      - name: create File System
+        filesystem:
+          dev: /dev/vgdata/lvdata
+          fstype: xfs
+      - name: Create Mount Point
+        file:
+          path: /share1
+          state: directory
+      - name: mount file system
+        mount:
+          src: /dev/vgdata/lvdata
+          path: /share
+          fstype: xfs
+          state: mounted
+    when:  
+      - ansible_facts['devices']['sdb']  is defined
+      - ansible_facts['devices']['sdb']['size']  <= "1000000"

@@ -1,0 +1,16 @@
+---
+- name: stat module tests
+  hosts: ansible1
+  tasks:
+  - command: touch /tmp/statfile
+  - stat:
+      path: /tmp/statfile
+    register: st
+  - name: show current values
+    debug:
+      msg: current value of the st variable is {{ st }}
+  - name: changing file permissions if that's needed
+    file:
+      path: /tmp/statfile
+      mode: 0640
+    when: st.stat.mode != '0640'

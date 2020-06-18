@@ -1,0 +1,4 @@
+  - name: create an XFS filesystem
+    filesystem:
+      dev: /dev/vgdata/lvdata
+      fstype: xfs

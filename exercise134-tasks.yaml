@@ -1,0 +1,13 @@
+  - name: create groups
+    group:
+      name: "{{ item.groups }}"
+      state: present
+    loop: "{{ users }}"
+  - name: create users
+    user:
+      name: "{{ item.username }}"
+      groups: "{{ item.groups }}"
+      generate_ssh_key: yes
+      ssh_key_comment: "{{ item.username }}@{{ ansible_fqdn }}"
+      password: $6$mysalt$NN1QGsmCO0hcvplH4ahY6ocho6F6TgcY8yNdMFAeO.LAeFodNPGA6KsQM5Or1AKbE4QKSqnEsC/SE0Zz3ts9y1
+    loop: "{{ users }}"

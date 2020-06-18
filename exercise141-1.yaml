@@ -1,0 +1,11 @@
+---
+- name: run a cron job
+  hosts: ansible2
+  tasks:
+  - name: run a periodic job
+    cron:
+      name: "run logger"
+      minute: "0"
+      hour: "5"
+      job: "logger IT IS 5 AM"
+

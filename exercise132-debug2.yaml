@@ -1,0 +1,26 @@
+---
+- name: test with slurp
+  hosts: localhost
+  tasks:
+  - name: test with slurp on localhost
+    slurp:
+      src: /home/mandie/.ssh/id_rsa.pub
+    register: slurped_file
+    become: true
+    delegate_to: localhost
+  - debug:
+      msg: the file contents is {{ slurped_file.content }}
+  - copy:
+      content: "{{ slurped_file.content }}"
+      dest: mandie-debug2.key
+      mode: 0644
+      owner: mandie
+      group: mandie
+    become: true
+    delegate_to: localhost
+  - name: copy key
+    authorized_key:
+      user: mandie
+      state: present
+      key: mandie-debug2.key
+

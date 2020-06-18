@@ -1,0 +1,57 @@
+---
+- name: Managing web server SELinux properties
+  hosts: ansible1
+  vars:
+    package: httpd
+    service: httpd
+    message: warning: authorized use only
+  tasks:
+  - name: ensure SELinux is enabled and enforcing
+    selinux:
+      policy: targeted
+      state: enforcing
+  - name: install the webserver
+    yum:
+      name: {{ package }}
+      state: latest
+  - name: start and enable the webserver
+    service: 
+      name: "{{ service }}"
+      state: started
+      enabled: yes
+  - name: open the firewall service
+    firewalld:
+    - service: http
+      immediate: yes
+      permanent: yes
+      state: enabled
+  - name: create the /web directory
+    file:
+      name: /web
+      state: directory
+  - name: create the index.html file in /web
+    copy:
+      content: "{{ message }}"
+      dest: /web/index.html
+  - name: use lineinfile to change webserver configuration
+    lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      regexp: '^DocumentRoot "/var/www/html"'
+      line: DocumentRoot "/web"
+  - name: use lineinfile to change webserver security
+    lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      regexp: '^<Directory "/var/www">'
+      line: '<Directory "/web">'
+  - name: use sefcontext to set context on new documentroot
+    sefcontext: 
+      target: '/web(/.*)?'
+      setype: httpd_sys_content_t
+      state: present
+  - name: run the restorecon command
+    command: restorecon -Rv /web
+  - name: allow the web server to run user content
+    seboolean:
+      name: httpd_read_user_content
+      state: yes
+      persistent: yes

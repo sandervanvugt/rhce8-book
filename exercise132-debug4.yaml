@@ -1,0 +1,27 @@
+---
+- name: goat
+  hosts: ansible3
+  vars_prompt:
+  - name: my_user
+    prompt: which user?
+  tasks:
+  - name: create user
+    user:
+      name: "{{ my_user }}"
+  - name: fetch public key
+    shell: 'cat /home/"{{ my_user }}"/.ssh/id_rsa.pub > temp.key'
+    become: true
+    delegate_to: localhost
+  - name: fix permissions and shit
+    file: 
+      name: temp.key
+      owner: "{{ my_user }}"
+      group: "{{ my_user }}"
+      mode: 0644
+    become: true
+    delegate_to: localhost
+  - name: copy authorized key
+    authorized_key:
+      user: "{{ my_user }}"
+      state: present
+      key: temp.key

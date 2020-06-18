@@ -1,0 +1,5 @@
+  - name: create a logical volume:
+    lvol:
+      lv: lvdata
+      size: 100%FREE
+      vg: vgdata

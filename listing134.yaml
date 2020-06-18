@@ -1,0 +1,22 @@
+---
+- name: configure sudo
+  hosts: ansible2
+  vars_files:
+    - vars/sudo
+    - vars/users
+  tasks:
+  - name: add groups
+    group:
+      name: "{{ item.name }}"
+    loop: "{{ sudo_groups }}"
+  - name: add users
+    user:
+      name: "{{ item.username }}"
+      groups: "{{ item.groups }}"
+    loop: "{{ users }}"
+  - name: allow group members in sudo
+    template:
+      src: listing133.j2
+      dest: /etc/sudoers.d/sudogroups
+      validate: 'visudo -cf %s'
+      mode: 0440

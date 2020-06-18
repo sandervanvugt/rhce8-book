@@ -1,0 +1,13 @@
+---
+- name: test webserver access
+  hosts: localhost
+  become: no
+  tasks:
+  - name: connect to the web server
+    uri:
+      url: http://ansible2.example.com
+      return_content: yes
+    register: this
+    failed_when: "'welcome' not in this.content"
+  - debug:
+      var: this.content

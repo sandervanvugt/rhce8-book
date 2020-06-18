@@ -1,0 +1,9 @@
+---
+- name: lookup plugin test
+  hosts: ansible1
+  vars:
+    file_contents: "{{lookup('file', '/etc/hosts')}}"
+  tasks:
+  - name: show variable contents
+    debug:
+      var: file_contents

@@ -1,0 +1,7 @@
+[packages]
+web_package = httpd
+ftp_package = vsftpd
+
+[services]
+web_service = httpd
+ftp_service = vsftpd

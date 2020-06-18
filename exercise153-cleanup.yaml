@@ -1,0 +1,22 @@
+---
+- name: cleanup exercise 15.3
+  hosts: all
+  tasks:
+  - name: stop if there is no second disk
+    fail:
+      msg: there is no second disk, no action needed
+    when: ansible_facts['devices']['sdb'] is not defined
+  - name: removing logical volume lvfiles
+    lvol:
+      vg: vgfiles
+      lv: lvfiles
+      force: yes
+      state: absent
+  - name: removing volume group vgfiles
+    lvg:
+      vg: vgfiles
+      state: absent
+  - name: cleaning up disk radically
+    command: dd if=/dev/zero of=/dev/sdb bs=1M count=10
+  - name: restart nodes to complete
+    reboot:

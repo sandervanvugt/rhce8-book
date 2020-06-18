@@ -1,0 +1,19 @@
+---
+- name: get vg sizes
+  ignore_errors: yes
+  hosts: all
+  tasks:
+  - name: set vgroups sizes in variables
+    set_fact:
+      vgsize: "{{ ansible_facts['lvm']['vgs']['cl']['size_g'] | int }}" 
+  - name: debug this
+    debug:
+      msg: the value of vgsize is {{ vgsize }}
+  - name: testing big vgsize value
+    debug:
+      msg: the value of vgsize is bigger than 5
+    when: vgsize | int > 5
+  - name: testing small vgsize value
+    debug:
+      msg: the value of vgsize is smaller than 5
+    when: vgsize | int <= 5

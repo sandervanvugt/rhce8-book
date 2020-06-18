@@ -1,0 +1,21 @@
+---
+- name: create user accounts
+  hosts: ansible1
+  tasks:
+  - name: create groups
+    group:
+      name: "{{ item.groups }}"
+      state: present
+    loop: "{{ users }}"
+  - name: create users
+    user:
+      name: "{{ item.username }}"
+      group: "{{ item.groups }}"
+    loop: "{{ users }}"
+  - name: allow group members in sudo
+    template:
+      src: exercise131.j2
+      dest: /etc/sudoers.d/sudogroups
+      validate: 'visudo -cf %s'
+      mode: 0440
+    loop: "{{ users }}"

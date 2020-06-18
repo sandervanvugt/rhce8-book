@@ -1,0 +1,13 @@
+---
+- name: assert test
+  hosts: localhost
+  vars:
+    filesize: 200
+  tasks:
+  - name: test
+    assert:
+      that:
+      - filesize <= 100
+      - filesize >= 0
+      fail_msg: failed
+      success_msg: good

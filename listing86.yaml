@@ -1,0 +1,16 @@
+---
+- name: configuring SSH
+  hosts: all
+  tasks:
+  - name: disable root SSH login
+    lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: "^PermitRootLogin"
+      line: "PermitRootLogin no"
+    notify: restart sshd
+
+  handlers:
+  - name: restart sshd 
+    service:
+      name: sshd
+      state: restarted

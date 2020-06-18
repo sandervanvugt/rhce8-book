@@ -1,0 +1,9 @@
+---
+- name: work with template file
+  vars:
+    apache_package: 'httpd'
+  hosts: ansible2
+  tasks:
+  - template:
+      src: listing817.j2
+      dest: /tmp/httpd.conf

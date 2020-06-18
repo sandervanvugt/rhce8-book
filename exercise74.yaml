@@ -1,0 +1,24 @@
+---
+- name: work with package facts
+  hosts: ansible2
+  tasks:
+  - name: gather rpm facts
+    package_facts:
+      manager: auto
+  - name: list packages
+    debug:
+      msg: "{{ ansible_facts.packages }}"
+  - name: query packages from a list
+    block:
+    - name: checking if installed
+      debug: 
+        msg: package {{ item }} is installed
+    rescue:
+    - name: print if not installed
+      debug:
+        msg: package {{ item }} is not installed
+    loop: 
+      - kernel={{ ansible_facts.packages['kernel'][0].version }}
+      - bash={{ ansible_facts.packages['bash'][0].version }}
+      - glibc={{ ansible_facts.packages['glibc'][0].version }}
+      - nmap={{ ansible_facts.packages['nmap'][0].version }}

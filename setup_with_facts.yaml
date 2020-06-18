@@ -1,0 +1,13 @@
+---
+- name: install and start the web service
+  hosts: ansible1
+  tasks:
+  - name: install the package
+    yum:
+      name: "{{ ansible_facts['ansible_local']['custom']['software']['package'] }}"
+      state: latest
+  - name: start the service
+    service: 
+      name: "{{ ansible_facts['ansible_local']['custom']['software']['service'] }}"
+      state: "{{ ansible_facts['ansible_local']['custom']['software']['state'] }}"
+      enabled: "{{ ansible_facts['ansible_local']['custom']['software']['enabled'] }}"

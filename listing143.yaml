@@ -1,0 +1,8 @@
+---
+- name: run a cron job
+  hosts: ansible2
+  tasks:
+  - name: run a periodic job
+    cron:
+      name: "run fstrim"
+      state: absent

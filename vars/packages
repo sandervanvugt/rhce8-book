@@ -1,0 +1,7 @@
+packages:
+- name: httpd
+  state: absent
+- name: vsftpd
+  state: installed
+- name: mysql-server
+  state: latest

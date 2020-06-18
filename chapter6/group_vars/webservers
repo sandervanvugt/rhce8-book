@@ -1,0 +1,2 @@
+web_package: httpd
+web_service: httpd

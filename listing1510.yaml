@@ -1,0 +1,5 @@
+  - name: mount the filesystem
+    mount:
+      src: /dev/vgdata/lvdata
+      fstype: xfs
+      state: mounted

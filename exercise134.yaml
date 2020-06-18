@@ -1,0 +1,38 @@
+---
+- name: create users on localhost
+  hosts: localhost
+  vars_files:
+  - exercise134-vars.yaml
+  tasks:
+  - name: include user and group setup
+    import_tasks: exercise134-tasks.yaml
+  - name: create a directory to store the file
+    file:
+      name: "{{ item.username }}"
+      state: directory
+    loop: "{{ users }}"
+  - name: copy the local user ssh key to temporary {{ item.username }} key
+    shell: 'cat /home/{{ item.username }}/.ssh/id_rsa.pub > {{ item.username }}/id_rsa.pub'
+    loop: "{{ users }}"
+  - name: verify that file exists
+    command: ls -l {{ item.username }}/
+    loop: "{{ users }}"
+  tags: setuplocal
+
+- name: create users on managed host
+  hosts: ansible4
+  vars_files:
+  - exercise134-vars.yaml
+  tasks:
+  - name: include user and group setup
+    import_tasks: exercise134-tasks.yaml
+  - name: copy authorized keys
+    authorized_key:
+      user: "{{ item.username }}"
+      key: "{{ lookup('file', './'+ item.username +'/id_rsa.pub') }}"
+    loop: "{{ users }}"
+  - name: copy sudoers file
+    copy:
+      content: '%admins ALL=(ALL:ALL) NOPASSWD:ALL'
+      dest: /etc/sudoers.d/admins
+  tags: setupremote

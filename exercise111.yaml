@@ -1,0 +1,27 @@
+---
+- name: perform basic apache setup
+  hosts: ansible2
+  vars:
+    apache_root: /etc/httpd
+    apache_user: httpd
+    apache_group: httpd
+  tasks:
+  - name: install RPM package
+    yum:
+      name: httpd
+      state: latest
+  - name: copy template file
+    template:
+      src: exercise111-httpd.j2
+      dest: /etc/httpd/httpd.conf
+  - name: start and enable service
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+  - name: open port in firewall
+    firewalld:
+      service: http
+      permanent: yes
+      state: enabled
+      immediate: yes

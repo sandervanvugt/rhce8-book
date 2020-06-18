@@ -1,0 +1,16 @@
+  - name: install the firewall
+    package:
+      name: "{{ firewall_package }}"
+      state: latest
+  - name: start the firewall
+    service:
+      name: "{{ firewall_service }}"
+      enabled: true
+      state: started
+  - name: open the port for the service
+    firewalld:
+      service: "{{ item }}"
+      immediate: true
+      permanent: true
+      state: enabled
+    loop: "{{ firewall_rules }}"

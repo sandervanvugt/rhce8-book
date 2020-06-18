@@ -1,0 +1,15 @@
+---
+- name: demonstrating the fail module
+  hosts: all
+  ignore_errors: yes
+  tasks:
+  - name: run a script
+    command: echo hello world
+    register: command_result
+  - name: report a failure
+    fail:
+      msg: the command has failed
+    when: "'world' in command_result.stdout"
+  - name: see if we get here
+    debug:
+      msg: second task executed

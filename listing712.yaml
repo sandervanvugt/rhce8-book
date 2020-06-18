@@ -1,0 +1,8 @@
+---
+- name: testing multiple conditions
+  hosts: all
+  tasks:
+  - name: showing output
+    debug:
+      msg: using CentOS 8.1
+    when: ansible_facts['distribution_version'] == "8.1" and ansible_facts['distribution'] == "CentOS"

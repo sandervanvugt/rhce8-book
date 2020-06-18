@@ -1,0 +1,21 @@
+---
+- name: remove users
+  hosts: all,localhost
+  vars:
+    users:
+    - pieter
+    - blair
+    - sharon
+    - bill
+    - ashley
+  tasks:
+  - user:
+      name: "{{ item }}"
+      state: absent
+      force: yes
+    loop: "{{ users }}"
+  - file:
+      name: "{{ item }}"
+      state: absent
+      force: yes
+    loop: "{{ users }}"

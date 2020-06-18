@@ -1,0 +1,23 @@
+---
+- name: create storage
+  hosts: ansible2
+  tasks:
+  - name: create new partition
+    parted:
+      name: files
+      label: gpt
+      device: /dev/sdb
+      number: 1
+      state: present
+      part_start: 1MiB
+      part_end: 2GiB
+  - name: create another new partition
+    parted:
+      name: swap
+      label: gpt
+      device: /dev/sdb
+      number: 2
+      state: present
+      part_start: 2GiB
+      part_end: 4GiB
+      flags: [ lvm ]

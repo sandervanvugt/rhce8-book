@@ -1,0 +1,9 @@
+---
+- name: set default boot target
+  hosts: ansible2
+  tasks:
+    - name: set boot target to graphical
+      file:
+        src: /usr/lib/systemd/system/graphical.target
+        dest: /etc/systemd/system/default.target
+        state: link

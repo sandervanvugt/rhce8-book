@@ -1,0 +1,11 @@
+---
+- name: test register
+  hosts: all
+  tasks:
+    - shell: cat /etc/passwd
+      register: passwd_contents
+    - debug:
+        msg: "{{ passwd_contents }}"
+    - debug: 
+        msg: passwd contains user lisa
+      when: passwd_contents.stdout.find('lisa') != -1

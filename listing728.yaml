@@ -1,0 +1,12 @@
+---
+- name: demonstrate changed status
+  hosts: all
+  tasks:
+  - name: check local time
+    command: date
+    register: command_result
+    changed_when: false
+
+  - name: print local time
+    debug:
+      var: command_result.stdout

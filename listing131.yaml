@@ -1,0 +1,17 @@
+---
+- name: creating a user and group
+  hosts: ansible2
+  tasks:
+  - name: setup the group account
+    group:
+      name: students
+      state: present
+  - name: setup the user account
+    user:
+      name: anna
+      create_home: yes
+      groups: wheel,students
+      append: yes
+      generate_ssh_key: yes
+      ssh_key_bits: 2048
+      ssh_key_file: .ssh/id_rsa

@@ -1,0 +1,24 @@
+---
+- name: installing a template file
+  hosts: ansible1
+  tasks:
+  - name: install http
+    yum:
+      name: httpd
+      state: latest
+  - name: start and enable httpd
+    service:
+      name: httpd
+      state: started
+      enabled: true
+  - name: install vhost config file
+    template:
+      src: listing813.j2
+      dest: /etc/httpd/conf.d/vhost.conf
+      owner: root
+      group: root
+      mode: 0644
+  - name: restart httpd
+    service:
+      name: httpd
+      state: restarted

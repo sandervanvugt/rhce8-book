@@ -1,0 +1,10 @@
+---
+- name: conditionals test
+  hosts: all
+  tasks:
+  - name: update kernel if sufficient space in /boot
+    package:
+      name: kernel
+      state: latest
+    loop: "{{ ansible_facts['mounts'] }}"
+    when: item.mount == "/boot" and item.size_available > 200000000

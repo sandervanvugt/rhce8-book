@@ -1,0 +1,8 @@
+---
+- name: define variable according to diskname detected
+  hosts: all
+  tasks:
+  - ignore_errors: yes
+    set_fact:
+      disk2name: sdb
+    when: ansible_facts['devices']['sdb']

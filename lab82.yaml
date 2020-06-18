@@ -1,0 +1,60 @@
+---
+- name: install vsftpd
+  hosts: ansible2.example.com
+  tasks:
+  - name: get basic vsftpd operational
+    yum:
+      name: vsftpd
+      state: installed
+  - name: start and enable vsftpd
+    service:
+      name: vsftpd
+      enabled: yes
+      state: started
+  - name: open port in firewall
+    firewalld:
+      service: ftp
+      permanent: yes
+      immediate: yes
+      state: enabled
+
+- name: configure VSFTPD using a template
+  hosts: ansible2.example.com
+  vars:
+    anonymous_enable: yes
+    local_enable: yes
+    write_enable: yes
+    anon_upload_enable: yes
+  tasks:
+  - name: use template to copy FTP config
+    template:
+      src: lab82.j2
+      dest: /etc/vsftpd/vsftpd.conf
+
+- name: configure vsftpd permissions and selinux
+  hosts: ansible2.example.com
+  tasks:
+  - name: install required selinux tools
+    yum:
+      name: policycoreutils-python-utils
+      state: present
+  - name: set permissions
+    file:
+      path: /var/ftp/pub
+      mode: '0777'
+  - name: set selinux boolean
+    seboolean:
+      name: ftpd_anon_write
+      state: yes
+      persistent: yes
+  - name: manage selinux settings
+    sefcontext:
+      target: /var/ftp/pub
+      setype: public_content_rw_t
+      state: present
+    notify:
+      - run restorecon
+  handlers:
+  - name: run restorecon
+    command: restorecon -vR /var/ftp/pub
+    

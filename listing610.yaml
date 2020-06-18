@@ -1,0 +1,10 @@
+---
+- name: using variables
+  hosts: ansible1
+  vars:
+    ftp_package: vsftpd
+  tasks:
+  - name: install package
+    yum:
+      name: "{{ ftp_package }}"
+      state: latest

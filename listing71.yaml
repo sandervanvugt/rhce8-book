@@ -1,0 +1,22 @@
+---
+- name: install and start services
+  hosts: ansible1
+  tasks:
+  - name: install packages
+    yum:
+      name:
+      - vsftpd
+      - httpd
+      - samba
+      state: latest
+  - name: start the services
+    service:
+      name: "{{ item }}"
+      state: started
+      enabled: yes
+    loop:
+    - vsftpd
+    - httpd
+    - smb
+
+

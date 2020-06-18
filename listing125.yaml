@@ -1,0 +1,18 @@
+--- 
+- name: using package facts
+  hosts: ansible2
+  vars:
+    my_package: nmap
+  tasks: 
+  - name: install package
+    yum:
+      name: "{{ my_package }}"
+      state: present
+  - name: update package facts
+    package_facts:
+      manager: auto
+  - name: show package facts for {{ my_package }}
+    debug:
+      var: ansible_facts.packages[my_package]
+    when: my_package in ansible_facts.packages
+

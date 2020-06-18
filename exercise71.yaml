@@ -1,0 +1,9 @@
+- name: manage packages using a loop from a list
+  hosts: ansible1
+  vars_files: vars/packages
+  tasks:
+  - name: install packages
+    yum:
+      name: "{{ item.name }}"
+      state: "{{ item.state }}"
+    loop: "{{ packages }}"

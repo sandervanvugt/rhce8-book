@@ -1,0 +1,13 @@
+---
+- name: update the kernel
+  hosts: all
+  force_handlers: true
+  tasks: 
+  - name: update kernel
+    yum:
+      name: kernel
+      state: latest
+    notify: reboot_server
+  handlers:
+  - name: reboot_server
+    command: reboot

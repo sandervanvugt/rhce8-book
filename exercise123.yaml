@@ -1,0 +1,67 @@
+---
+- name: add host to inventory
+  hosts: localhost
+  tasks:
+  - fail:
+      msg: "add the options -e newhost=hostname -e newhostip=ip.ad.dr.ess and try again"
+    when: (newhost is undefined) or (newhostip is undefined)
+  - name: add new host to inventory
+    lineinfile:
+      path: inventory
+      state: present
+      line: "{{ newhost }}"
+  - name: add new host to /etc/hosts
+    lineinfile:
+      path: /etc/hosts
+      state: present
+      line: "{{ newhostip }} {{ newhost }}"
+  tags: addhost
+
+- name: configure a new RHEL host
+  hosts: "{{ newhost }}"
+  remote_user: root
+  become: false
+  tasks:
+  - name: configure user ansible
+    user:
+      name: ansible
+      groups: wheel
+      append: yes
+      state: present
+  - name: set a password for this user
+    shell: 'echo password | passwd --stdin ansible'
+  - name: enable sudo without passwords
+    lineinfile:
+      path: /etc/sudoers
+      regexp: '^%wheel'
+      line: '%wheel ALL=(ALL)  NOPASSWD: ALL'
+      validate: /usr/sbin/visudo -cf %s
+  - name: create SSH directory in user ansible home
+    file:
+      path: /home/ansible/.ssh
+      state: directory
+      owner: ansible
+      group: ansible
+  - name: copy SSH public key to remote host
+    copy:
+      src: /home/ansible/.ssh/id_rsa.pub
+      dest: /home/ansible/.ssh/authorized_keys
+  tags: setuphost
+
+- name: use subscription manager to register and set up repos
+  hosts: "{{ newhost }}"
+  vars_files:
+  - exercise123-vault.yaml
+  tasks:
+  - name: register and subscribe {{ newhost }}
+    redhat_subscription:
+      username: "{{ rhsm_user }}"
+      password: "{{ rhsm_password }}"
+      state: present
+  - name: configure additional repo access
+    rhsm_repository:
+      name: 
+      - rh-gluster-3-client-for-rhel-8-x86_64-rpms
+      - rhel-8-for-x86_64-appstream-debug-rpms 
+      state: present
+  tags: registerhost

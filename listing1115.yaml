@@ -1,0 +1,22 @@
+---
+- name: using tags example
+  hosts: all
+  vars:
+    service:
+    - vsftpd
+    - httpd
+  tasks:
+  - yum:
+      name: 
+      - httpd
+      - vsftpd
+      state: present
+    tags:
+    - install
+  - service:
+      name: "{{ item }}"
+      state: started
+      enabled: yes
+    loop: "{{ services }}"
+    tags:
+    - services

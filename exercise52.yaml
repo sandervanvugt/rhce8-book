@@ -1,0 +1,17 @@
+---
+- name: copy multiline test
+  hosts: ansible1
+  tasks:
+  - name: copy text
+    copy:
+      content: |
+        line 1
+        line 2
+      dest: /tmp/multiline1.txt
+  - name: copy more text
+    copy:
+      content: >
+        line 1
+        line 2
+      dest: /tmp/multiline2.txt
+   

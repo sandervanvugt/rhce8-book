@@ -1,0 +1,33 @@
+---
+- name: goat
+  hosts: ansible3
+  tasks:
+  - name: create user
+    user:
+      name: linda
+  - name: fetch public key
+    shell: 'cat /home/linda/.ssh/id_rsa.pub > linda-temp.key'
+    become: true
+    delegate_to: localhost
+  - name: fix permissions and shit
+    file: 
+      name: linda-temp.key
+      owner: linda
+      group: linda
+      mode: 0644
+    become: true
+    delegate_to: localhost
+  - name: create .ssh directory
+    file:
+      name: /home/linda/.ssh
+      state: directory
+      mode: 0700
+      owner: linda
+      group: linda
+  - name: copy temp key to final destination
+    copy:
+      src: linda-temp.key
+      dest: /home/linda/.ssh/authorized_keys
+      mode: 0600
+      owner: linda
+      group: linda

@@ -1,0 +1,19 @@
+---
+- name: create user with encrypted pass
+  hosts: ansible2
+  vars_prompt:
+  - name: passw
+    prompt: which password do you want to use
+  vars:
+    user: sharon
+  tasks:
+  - debug: 
+      msg: "{{ '{{ passw }}' | password_hash('sha512','myrandomsalt') }}"
+    register: mypass
+  - debug:
+      var: mypass
+  - name: create the user
+    user: 
+      name: "{{ user }}"
+      password: "{{ mypass.msg }}"
+
