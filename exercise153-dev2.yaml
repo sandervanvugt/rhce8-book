@@ -11,9 +11,9 @@
       msg: the value of vgsize is {{ vgsize }}
   - name: testing big vgsize value
     debug:
-      msg: the value of vgsize is bigger than 5
-    when: vgsize | int > 5
+      msg: the value of vgsize is bigger than 18
+    when: vgsize | int > 18
   - name: testing small vgsize value
     debug:
-      msg: the value of vgsize is smaller than 5
-    when: vgsize | int <= 5
+      msg: the value of vgsize is smaller than 20
+    when: vgsize | int <= 20

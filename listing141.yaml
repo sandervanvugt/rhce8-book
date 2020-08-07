@@ -6,5 +6,6 @@
     systemd:
       name: httpd
       enabled: yes
+      state: started
       masked: no
       daemon_reload: yes

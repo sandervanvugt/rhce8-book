@@ -3,7 +3,7 @@
   hosts: all
   tasks:
   - name: check if vgdata exists
-    command: vgs cl
+    command: vgs vgdata
     register: vg_result
     ignore_errors: true
   - name: show vg_result variable

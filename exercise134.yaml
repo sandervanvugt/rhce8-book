@@ -20,7 +20,7 @@
   tags: setuplocal
 
 - name: create users on managed host
-  hosts: ansible4
+  hosts: ansible2
   vars_files:
   - exercise134-vars.yaml
   tasks:

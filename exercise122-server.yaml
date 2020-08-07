@@ -1,5 +1,5 @@
 ---
-- name: install FTP to export repo
+- name: install, configure, start and enable FTP
   hosts: localhost
   tasks:
   - name: install FTP server

@@ -13,7 +13,7 @@
   - name: copy template file
     template:
       src: exercise111-httpd.j2
-      dest: /etc/httpd/httpd.conf
+      dest: /etc/http/httpd.conf
   - name: start and enable service
     service:
       name: httpd

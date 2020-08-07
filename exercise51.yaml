@@ -4,9 +4,10 @@
   tasks:
   - name: install package
     yum:
-    name: vsftpd
+      name: vsftpd
       state: latest
-  - service:
-    name: vsftpd
+  - name: start and enable the vsftpd service
+    service:
+      name: vsftpd
       state: started
       enabled: yes

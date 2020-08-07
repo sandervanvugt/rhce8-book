@@ -24,7 +24,7 @@
   - name: create a volume group
     lvg:
       vg: vgdata
-      pesize: 8
+      pesize: "8"
       pvs: /dev/sdb2
   - name: create a logical volume
     lvol:

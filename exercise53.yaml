@@ -4,8 +4,9 @@
   tasks:
   - name: install stuff
     yum:
-    - httpd
-    - firewalld
+      name:
+      - httpd
+      - firewalld
   - name: create a welcome page
     copy:
       content: "welcome to the webserver\n"
