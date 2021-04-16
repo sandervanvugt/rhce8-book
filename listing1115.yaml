@@ -2,7 +2,7 @@
 - name: using tags example
   hosts: all
   vars:
-    service:
+    services:
     - vsftpd
     - httpd
   tasks:
