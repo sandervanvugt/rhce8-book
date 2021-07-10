@@ -8,7 +8,7 @@
     user: sharon
   tasks:
   - debug: 
-      msg: "{{ '{{ passw }}' | password_hash('sha512','myrandomsalt') }}"
+      msg: "{{ passw | password_hash('sha512','myrandomsalt') }}"
     register: mypass
   - debug:
       var: mypass
