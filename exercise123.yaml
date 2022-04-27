@@ -46,6 +46,9 @@
     copy:
       src: /home/ansible/.ssh/id_rsa.pub
       dest: /home/ansible/.ssh/authorized_keys
+      owner: ansible
+      group: ansible
+      mode: 0600
   tags: setuphost
 
 - name: use subscription manager to register and set up repos
