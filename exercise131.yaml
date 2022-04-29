@@ -13,9 +13,9 @@
       group: "{{ item.groups }}"
     loop: "{{ users }}"
   - name: allow group members in sudo
-    template:
-      src: exercise131.j2
+    lineinfile:
       dest: /etc/sudoers.d/sudogroups
+      line: "{{ item.groups }} ALL=(ALL:ALL) NOPASSWD:ALL"
       validate: 'visudo -cf %s'
       mode: 0440
     loop: "{{ users }}"
