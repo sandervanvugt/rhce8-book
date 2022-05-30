@@ -6,9 +6,18 @@
     yum:
       name: vsftpd
       state: installed
+  - name: install firewalld
+    yum:
+      name: firewalld
+      state: installed
   - name: start and enable vsftpd
     service:
       name: vsftpd
+      enabled: yes
+      state: started
+  - name: start and enable firewalld
+    service:
+      name: firewalld
       enabled: yes
       state: started
   - name: open port in firewall
@@ -21,10 +30,10 @@
 - name: configure VSFTPD using a template
   hosts: ansible2.example.com
   vars:
-    anonymous_enable: yes
-    local_enable: yes
-    write_enable: yes
-    anon_upload_enable: yes
+    anonymous_enable: "yes"
+    local_enable: "yes"
+    write_enable: "yes"
+    anon_upload_enable: "yes"
   tasks:
   - name: use template to copy FTP config
     template:
@@ -41,6 +50,7 @@
   - name: set permissions
     file:
       path: /var/ftp/pub
+      state: directory
       mode: '0777'
   - name: set selinux boolean
     seboolean:
